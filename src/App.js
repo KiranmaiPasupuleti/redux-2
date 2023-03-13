@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export class App extends Component {
+  render() {
+    console.log(this.props.history)
+    return (
+      <div>
+        <h1>{this.props.greeting}</h1>
+        Count : {this.props.count}
+        <button onClick={this.props.increment}>Increase</button>
+        <button onClick={this.props.decrement}>Decrease</button>
+        <h1>History</h1>
+        <ul>
+          {this.props.history.map(eachElement => (<li key={eachElement.id}>
+            {eachElement.count}
+          </li>))}
+        </ul>
+      </div>
+    )
+  }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    greeting: state.greeting,
+    count : state.count,
+    history : state.history
+  }
+} 
+
+const mapDispatchToProps =(dispatch) => {
+  return {
+    increment: () => 
+    dispatch({
+      type: "INCREMENT",
+      value:10
+    }) ,
+    decrement: () => 
+    dispatch({
+      type: "DECREMENT",
+      value:10
+    })
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(App)
